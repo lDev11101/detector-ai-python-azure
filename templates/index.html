@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Detector AI - Clasificador de Residuos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .focus-rectangle {
+        position: absolute;
+        border: 4px solid #6366f1;
+        border-radius: 16px;
+        width: 380px;
+        height: 285px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        box-shadow: 0 0 0 2px #fff, 0 0 16px #6366f1;
+      }
+      .video-container {
+        position: relative;
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center">
+    <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-xl mt-10">
+      <h1 class="text-2xl font-bold text-center mb-6 text-gray-800">Detector AI</h1>
+      <div class="flex flex-col gap-4">
+        <button id="webcamBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded transition">Detectar con Webcam</button>
+        <input type="file" id="fileInput" accept="image/*" class="hidden" />
+        <button id="uploadBtn" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition">Subir Imagen</button>
+      </div>
+      <div id="webcamContainer" class="mt-6 hidden flex-col items-center">
+        <div class="video-container">
+          <video id="video" width="400" height="300" autoplay class="rounded shadow-lg"></video>
+          <div class="focus-rectangle"></div>
+        </div>
+        <button id="captureBtn" class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded">Capturar y Analizar</button>
+        <canvas id="canvas" width="400" height="300" class="hidden"></canvas>
+      </div>
+      <div id="previewContainer" class="mt-6 hidden flex-col items-center">
+        <img id="previewImg" class="rounded shadow max-h-64" />
+        <button id="analyzeBtn" class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded">Analizar Imagen</button>
+      </div>
+      <div id="resultado" class="mt-6 text-center text-lg font-semibold text-gray-700"></div>
+    </div>
+    <script>
+      const webcamBtn = document.getElementById('webcamBtn')
+      const uploadBtn = document.getElementById('uploadBtn')
+      const fileInput = document.getElementById('fileInput')
+      const webcamContainer = document.getElementById('webcamContainer')
+      const previewContainer = document.getElementById('previewContainer')
+      const video = document.getElementById('video')
+      const canvas = document.getElementById('canvas')
+      const captureBtn = document.getElementById('captureBtn')
+      const previewImg = document.getElementById('previewImg')
+      const analyzeBtn = document.getElementById('analyzeBtn')
+      const resultado = document.getElementById('resultado')
+      let stream
+      
+      webcamBtn.onclick = async () => {
+        previewContainer.classList.add('hidden')
+        webcamContainer.classList.remove('hidden')
+        resultado.textContent = ''
+        if (!stream) {
+          stream = await navigator.mediaDevices.getUserMedia({ video: { width: 400, height: 300 } })
+          video.srcObject = stream
+        }
+      }
+      
+      uploadBtn.onclick = () => {
+        webcamContainer.classList.add('hidden')
+        previewContainer.classList.add('hidden')
+        resultado.textContent = ''
+        fileInput.click()
+      }
+      
+      fileInput.onchange = () => {
+        const file = fileInput.files[0]
+        if (file) {
+          const reader = new FileReader()
+          reader.onload = (e) => {
+            previewImg.src = e.target.result
+            previewContainer.classList.remove('hidden')
+          }
+          reader.readAsDataURL(file)
+        }
+      }
+      
+      analyzeBtn.onclick = () => {
+        const file = fileInput.files[0]
+        if (!file) return
+        const formData = new FormData()
+        formData.append('imagen', file)
+        resultado.textContent = 'Analizando...'
+        fetch('/analizar', {
+          method: 'POST',
+          body: formData
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            resultado.textContent = data.resultado || data.error
+          })
+          .catch(() => {
+            resultado.textContent = 'Error al analizar la imagen.'
+          })
+      }
+      
+      captureBtn.onclick = () => {
+        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height)
+        canvas.toBlob((blob) => {
+          const formData = new FormData()
+          formData.append('imagen', blob, 'captura.jpg')
+          resultado.textContent = 'Analizando...'
+          fetch('/analizar', {
+            method: 'POST',
+            body: formData
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              resultado.textContent = data.resultado || data.error
+            })
+            .catch(() => {
+              resultado.textContent = 'Error al analizar la imagen.'
+            })
+        }, 'image/jpeg')
+      }
+    </script>
+  </body>
+</html>
