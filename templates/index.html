@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <title>Detector AI - Clasificador de Residuos</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       .focus-rectangle {
@@ -23,30 +22,66 @@
         position: relative;
         display: inline-block;
       }
+      /* Añadido para el footer y modo oscuro, no afecta la funcionalidad */
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      main {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
     </style>
+    <script>
+      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+      }
+    </script>
   </head>
-  <body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center">
-    <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-xl mt-10">
-      <h1 class="text-2xl font-bold text-center mb-6 text-gray-800">Detector AI</h1>
-      <div class="flex flex-col gap-4">
-        <button id="webcamBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded transition">Detectar con Webcam</button>
-        <input type="file" id="fileInput" accept="image/*" class="hidden" />
-        <button id="uploadBtn" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition">Subir Imagen</button>
-      </div>
-      <div id="webcamContainer" class="mt-6 hidden flex-col items-center">
-        <div class="video-container">
-          <video id="video" width="400" height="300" autoplay class="rounded shadow-lg"></video>
-          <div class="focus-rectangle"></div>
+  <body class="bg-gray-100 dark:bg-gray-900">
+    <main class="p-4">
+      <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 w-full max-w-lg">
+        
+        <div class="text-center">
+          <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Detector AI</h1>
+          <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo AI" class="w-24 h-auto mx-auto my-4" />
         </div>
-        <button id="captureBtn" class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded">Capturar y Analizar</button>
-        <canvas id="canvas" width="400" height="300" class="hidden"></canvas>
+
+        <div class="flex flex-col gap-4">
+          <button id="webcamBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded transition">Detectar con Webcam</button>
+          <input type="file" id="fileInput" accept="image/*" class="hidden" />
+          <button id="uploadBtn" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition">Subir Imagen</button>
+        </div>
+
+        <div id="webcamContainer" class="mt-6 hidden flex-col items-center">
+          <div class="video-container">
+            <video id="video" width="400" height="300" autoplay class="rounded shadow-lg"></video>
+            <div class="focus-rectangle"></div>
+          </div>
+          <button id="captureBtn" class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded">Capturar y Analizar</button>
+          <canvas id="canvas" width="400" height="300" class="hidden"></canvas>
+        </div>
+
+        <div id="previewContainer" class="mt-6 hidden flex-col items-center">
+          <img id="previewImg" class="rounded shadow max-h-64" />
+          <button id="analyzeBtn" class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded">Analizar Imagen</button>
+        </div>
+        <div id="resultado" class="mt-6 text-center text-lg font-semibold text-gray-700 dark:text-gray-300"></div>
       </div>
-      <div id="previewContainer" class="mt-6 hidden flex-col items-center">
-        <img id="previewImg" class="rounded shadow max-h-64" />
-        <button id="analyzeBtn" class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded">Analizar Imagen</button>
-      </div>
-      <div id="resultado" class="mt-6 text-center text-lg font-semibold text-gray-700"></div>
-    </div>
+    </main>
+
+    <footer class="w-full bg-white dark:bg-gray-800/50 py-4 shadow-inner mt-auto">
+        <div class="text-center text-sm text-gray-600 dark:text-gray-400">
+            <p>&copy; 2025 Detector AI. Clasificador Inteligente de Residuos.</p>
+			<p>Creado por: Crisostomo Martinez, Guzmán Li, Manrrique Huamán, Muñante Crisostomo, Ortiz Quispe</p>
+        </div>
+    </footer>
+
     <script>
       const webcamBtn = document.getElementById('webcamBtn')
       const uploadBtn = document.getElementById('uploadBtn')
