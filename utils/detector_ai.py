@@ -29,6 +29,9 @@ organico_keywords = [
     "pollo",
     "arroz",
     "semilla",
+    "limón",
+    "rostro",
+    "persona",
 ]
 inorganico_keywords = [
     "plástico",
@@ -46,6 +49,9 @@ inorganico_keywords = [
     "bolsa",
     "lata",
     "electrónico",
+    "cuaderno",
+    "lentes",
+    "gafas",
 ]
 
 
