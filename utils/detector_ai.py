@@ -32,6 +32,42 @@ organico_keywords = [
     "limón",
     "rostro",
     "persona",
+    "manzana",
+    "banana",
+    "naranja",
+    "pera",
+    "uva",
+    "lechuga",
+    "tomate",
+    "cebolla",
+    "papa",
+    "zanahoria",
+    "maíz",
+    "sandía",
+    "melón",
+    "fresa",
+    "arándano",
+    "aguacate",
+    "palta",
+    "ajo",
+    "cilantro",
+    "apio",
+    "espinaca",
+    "brócoli",
+    "coliflor",
+    "calabaza",
+    "pepino",
+    "chile",
+    "pimiento",
+    "huevo",
+    "café",
+    "té",
+    "panela",
+    "azúcar",
+    "harina",
+    "grano",
+    "lenteja",
+    "garbanzo",
 ]
 inorganico_keywords = [
     "plástico",
@@ -52,7 +88,59 @@ inorganico_keywords = [
     "cuaderno",
     "lentes",
     "gafas",
+    "vaso",
+    "taza",
+    "cuchara",
+    "tenedor",
+    "cuchillo",
+    "silla",
+    "mesa",
+    "celular",
+    "computadora",
+    "televisor",
+    "pantalla",
+    "ratón",
+    "teclado",
+    "impresora",
+    "cargador",
+    "auriculares",
+    "disco",
+    "usb",
+    "cd",
+    "dvd",
+    "juguete",
+    "muñeca",
+    "carro",
+    "bicicleta",
+    "llanta",
+    "tornillo",
+    "clavo",
+    "regla",
+    "lapicero",
+    "bolígrafo",
+    "marcador",
+    "borrador",
+    "grapadora",
+    "clip",
+    "cinta",
 ]
+
+
+def obtener_objetos_detectados(image_path):
+    try:
+        with open(image_path, "rb") as image_stream:
+            analysis = client.analyze_image_in_stream(
+                image_stream,
+                visual_features=[VisualFeatureTypes.objects],
+                language="es",
+            )
+        if hasattr(analysis, "objects") and analysis.objects:
+            nombres = [obj.object_property.lower() for obj in analysis.objects]
+            return ", ".join(nombres)
+        else:
+            return "No detectado"
+    except Exception as e:
+        return f"Error: {e}"
 
 
 def analizar_imagen(image_path):
