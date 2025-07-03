@@ -56,6 +56,7 @@
           <button id="webcamBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded transition">Detectar con Webcam</button>
           <input type="file" id="fileInput" accept="image/*" class="hidden" />
           <button id="uploadBtn" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition">Subir Imagen</button>
+          <a href="{{ url_for('historial') }}" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 rounded transition text-center">Ver Historial</a>
         </div>
 
         <div id="webcamContainer" class="mt-6 hidden flex-col items-center">
@@ -68,7 +69,7 @@
         </div>
 
         <div id="previewContainer" class="mt-6 hidden flex-col items-center">
-          <img id="previewImg" class="rounded shadow max-h-64" />
+          <img id="previewImg" class="rounded shadow max-h-64" alt="Vista Previda"/>
           <button id="analyzeBtn" class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded">Analizar Imagen</button>
         </div>
         <div id="resultado" class="mt-6 text-center text-lg font-semibold text-gray-700 dark:text-gray-300"></div>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Historial - Detector AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    main {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900">
+  <main class="p-4">
+    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 w-full max-w-3xl mx-auto">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Historial de Clasificaciones</h1>
+        <a href="{{ url_for('index') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded">Volver</a>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead>
+            <tr>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Imagen</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Tipo</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Objetos</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Fecha</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Hora</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+            {% for item in historial %}
+            <tr>
+              <td class="px-4 py-2">
+                <img src="data:image/jpeg;base64,{{ item.imagen }}" alt="Im" class="w-24 h-16 object-cover rounded shadow" />
+              </td>
+              <td class="px-4 py-2 text-gray-800 dark:text-gray-200">{{ item.tipo }}</td>
+              <td class="px-4 py-2 text-gray-800 dark:text-gray-200">{{ item.objetos }}</td>
+              <td class="px-4 py-2 text-gray-800 dark:text-gray-200">{{ item.fecha }}</td>
+              <td class="px-4 py-2 text-gray-800 dark:text-gray-200">{{ item.hora }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        </div>
+        {% if total_pages > 1 %}
+        <div class="flex justify-center mt-6 gap-2">
+        {% if page > 1 %}
+            <a href="{{ url_for('historial', page=page-1) }}" class="px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700">&laquo; Anterior</a>
+        {% endif %}
+        {% for p in range(1, total_pages+1) %}
+            <a href="{{ url_for('historial', page=p) }}"
+            class="px-3 py-1 rounded {{ 'bg-indigo-700 text-white' if p == page else 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-indigo-600 hover:text-white' }}">
+            {{ p }}
+            </a>
+        {% endfor %}
+        {% if page < total_pages %}
+            <a href="{{ url_for('historial', page=page+1) }}" class="px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700">Siguiente &raquo;</a>
+        {% endif %}
+        </div>
+        {% endif %}
+      </div>
+      {% if not historial %}
+        <p class="text-center text-gray-500 dark:text-gray-400 mt-6">No hay registros aún.</p>
+      {% endif %}
+    </div>
+  </main>
+  <footer class="w-full bg-white dark:bg-gray-800/50 py-4 shadow-inner mt-auto">
+    <div class="text-center text-sm text-gray-600 dark:text-gray-400">
+      <p>&copy; 2025 Detector AI. Clasificador Inteligente de Residuos.</p>
+      <p>Creado por: Crisostomo Martinez, Guzmán Li, Manrrique Huamán, Muñante Crisostomo, Ortiz Quispe</p>
+    </div>
+  </footer>
+</body>
+</html>
