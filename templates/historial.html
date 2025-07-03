@@ -35,7 +35,6 @@
               <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Objetos</th>
               <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Fecha</th>
               <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Hora</th>
-              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">User</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -48,11 +47,27 @@
               <td class="px-4 py-2 text-gray-800 dark:text-gray-200">{{ item.objetos }}</td>
               <td class="px-4 py-2 text-gray-800 dark:text-gray-200">{{ item.fecha }}</td>
               <td class="px-4 py-2 text-gray-800 dark:text-gray-200">{{ item.hora }}</td>
-              <td class="px-4 py-2 text-gray-800 dark:text-gray-200">{{ item.ip }}</td>
             </tr>
             {% endfor %}
           </tbody>
         </table>
+        </div>
+        {% if total_pages > 1 %}
+        <div class="flex justify-center mt-6 gap-2">
+        {% if page > 1 %}
+            <a href="{{ url_for('historial', page=page-1) }}" class="px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700">&laquo; Anterior</a>
+        {% endif %}
+        {% for p in range(1, total_pages+1) %}
+            <a href="{{ url_for('historial', page=p) }}"
+            class="px-3 py-1 rounded {{ 'bg-indigo-700 text-white' if p == page else 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-indigo-600 hover:text-white' }}">
+            {{ p }}
+            </a>
+        {% endfor %}
+        {% if page < total_pages %}
+            <a href="{{ url_for('historial', page=page+1) }}" class="px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700">Siguiente &raquo;</a>
+        {% endif %}
+        </div>
+        {% endif %}
       </div>
       {% if not historial %}
         <p class="text-center text-gray-500 dark:text-gray-400 mt-6">No hay registros aún.</p>
