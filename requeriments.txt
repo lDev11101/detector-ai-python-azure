@@ -12,6 +12,7 @@ idna==3.10
 isodate==0.7.2
 itsdangerous==2.2.0
 Jinja2==3.1.6
+logging==0.4.9.6
 MarkupSafe==3.0.2
 msrest==0.7.1
 mysql-connector-python==9.3.0
