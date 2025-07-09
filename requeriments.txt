@@ -8,6 +8,7 @@ click==8.2.1
 colorama==0.4.6
 dotenv==0.9.9
 Flask==3.1.1
+gunicorn==23.0.0
 idna==3.10
 isodate==0.7.2
 itsdangerous==2.2.0
@@ -19,6 +20,7 @@ mysql-connector-python==9.3.0
 numpy==2.2.6
 oauthlib==3.2.2
 opencv-python==4.11.0.86
+packaging==25.0
 python-dotenv==1.1.0
 requests==2.32.3
 requests-oauthlib==2.0.0
